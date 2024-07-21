@@ -134,7 +134,6 @@ public class BgAppBlazorModule : AbpModule
 
     private void ConfigureAuthentication(ServiceConfigurationContext context)
     {
-        context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
         context.Services.AddOpenIddict().AddServer(
             Options =>
             {

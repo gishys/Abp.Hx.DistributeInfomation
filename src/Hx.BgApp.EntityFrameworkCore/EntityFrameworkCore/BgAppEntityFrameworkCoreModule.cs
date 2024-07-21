@@ -1,5 +1,6 @@
 ﻿using Hx.BgApp.EntityFrameworkCore.Layout;
 using Hx.BgApp.Layout;
+using Hx.BgApp.PublishInformation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -42,8 +43,10 @@ public class BgAppEntityFrameworkCoreModule : AbpModule
         context.Services.AddAbpDbContext<BgAppDbContext>(options =>
         {
             options.AddRepository<Project, EfCoreProjectRepository>();
-            options.AddRepository<Menu, EfCoreMenuRepository>();
+            options.AddRepository<Menu, EfCorePublishFeadbackRepository>();
             options.AddRepository<Page, EfCorePageRepository>();
+
+            options.AddRepository<PublishFeadbackInfo, EfCorePublishFeadbackRepository>();
 
             options.AddDefaultRepositories(includeAllEntities: true);
         });

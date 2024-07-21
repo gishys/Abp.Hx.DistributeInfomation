@@ -33,16 +33,19 @@ namespace Hx.BgApp.Layout
                 var home = new Page("home", "首页", "BgApp.Home", project.Id, false);
                 var usermanagement = new Page("usermanagement", "用户管理", "AbpIdentity.Users", project.Id, false);
                 var rolemanagement = new Page("rolemanagement", "角色管理", "AbpIdentity.Roles", project.Id, false);
+                var publishManagement = new Page("publishfeadbackmanagement", "发布信息管理", "App.PublishFeadback", project.Id, false);
                 var pages = new List<Page> {
                     home,
                     usermanagement,
                     rolemanagement,
+                    publishManagement,
                 };
                 await PageRepository.InsertManyAsync(pages);
                 var menus = new List<Menu> {
                     new(GuidGenerator.Create(),home.Title , "home.svg", project.Id, home.Code, home.Id, home.Path,1),
                     new(GuidGenerator.Create(),usermanagement.Title , "user_management.svg", project.Id, usermanagement.Code, usermanagement.Id, usermanagement.Path,3),
                     new(GuidGenerator.Create(),rolemanagement.Title , "role_management.svg", project.Id, rolemanagement.Code, rolemanagement.Id, rolemanagement.Path,4),
+                    new(GuidGenerator.Create(),publishManagement.Title , "publish_feadback_management.svg", project.Id, publishManagement.Code, publishManagement.Id, publishManagement.Path,5),
                 };
                 await MenuRepository.InsertManyAsync(menus);
             }

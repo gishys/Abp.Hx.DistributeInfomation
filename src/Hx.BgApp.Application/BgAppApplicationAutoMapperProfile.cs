@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Hx.BgApp.Layout;
+using Hx.BgApp.PublishInformation;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 
@@ -15,6 +16,9 @@ public class BgAppApplicationAutoMapperProfile : Profile
         CreateMap<Project, ProjectDto>(MemberList.Destination);
         CreateMap<Menu, MenuDto>(MemberList.Destination);
         CreateMap<Page, PageDto>(MemberList.Destination);
+
+        CreateMap<PublishFeadbackInfo, PublishFeadbackInfoDto>(MemberList.Destination);
+        CreateMap<ContentInfo, ContentInfoDto>(MemberList.Destination);
     }
     public string ToGeoJsonFeature(Geometry? record)
     {

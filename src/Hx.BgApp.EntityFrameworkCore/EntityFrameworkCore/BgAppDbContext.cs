@@ -1,5 +1,7 @@
 ﻿using Hx.BgApp.Layout;
+using Hx.BgApp.PublishInformation;
 using Microsoft.EntityFrameworkCore;
+using System;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Data;
@@ -58,6 +60,7 @@ public class BgAppDbContext :
     public DbSet<Project> Projects { get; set; }
     public DbSet<Menu> Menus { get; set; }
     public DbSet<Page> Pages { get; set; }
+    public DbSet<PublishFeadbackInfo> PublishFeadbackInfos { get; set; }
 
     public BgAppDbContext(DbContextOptions<BgAppDbContext> options)
         : base(options)
@@ -74,7 +77,7 @@ public class BgAppDbContext :
         //    point => new NetTopologySuite.IO.PostGisWriter().Write(point),
         //    point => (Geometry)new NetTopologySuite.IO.PostGisReader().Read(point)
         //);
-        //sAppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -104,7 +107,7 @@ public class BgAppDbContext :
             b.Property(p => p.DefaultMenuExpandedList).HasColumnName("DEFAULTMENUEXPANDEDLIST").HasMaxLength(ProjectConsts.MaxDefaultMenuExpandedListLength);
             b.Property(p => p.Current).HasColumnName("CURRENT");
 
-            b.Property(p => p.CreationTime).HasColumnName("CREATIONTIME").HasColumnType("timestamp without time zone");
+            b.Property(p => p.CreationTime).HasColumnName("CREATIONTIME").HasColumnType("timestamp with time zone");
             b.Property(p => p.CreatorId).HasColumnName("CREATORID");
 
             b.HasMany(p => p.Menus).WithOne().HasForeignKey(p => p.ProjectId).HasConstraintName("MENU_PROJECTID");
@@ -128,7 +131,7 @@ public class BgAppDbContext :
             b.Property(p => p.SerialNumber).HasColumnName("SERIALNUMBER").HasMaxLength(5);
             b.Property(p => p.ParentId).HasColumnName("PARENTID");
 
-            b.Property(p => p.CreationTime).HasColumnName("CREATIONTIME").HasColumnType("timestamp without time zone");
+            b.Property(p => p.CreationTime).HasColumnName("CREATIONTIME").HasColumnType("timestamp with time zone");
             b.Property(p => p.CreatorId).HasColumnName("CREATORID");
 
             b.HasOne<Page>().WithOne().HasForeignKey<Menu>(p => p.PageId).HasConstraintName("MENU_PAGEID");
@@ -146,8 +149,42 @@ public class BgAppDbContext :
             b.Property(p => p.ProjectId).HasColumnName("PROJECTID");
             b.Property(p => p.Disabled).HasColumnName("DISABLED");
 
-            b.Property(p => p.CreationTime).HasColumnName("CREATIONTIME").HasColumnType("timestamp without time zone");
+            b.Property(p => p.CreationTime).HasColumnName("CREATIONTIME").HasColumnType("timestamp with time zone");
             b.Property(p => p.CreatorId).HasColumnName("CREATORID");
+        });
+        builder.Entity<PublishFeadbackInfo>(tab =>
+        {
+            tab.ToTable(BgAppConsts.DbTablePrefix + "_PUBLISH_FEADBACKINFO", BgAppConsts.DbSchema);
+            tab.ConfigureByConvention();
+
+            tab.Property(p => p.Id).HasColumnName("ID");
+            tab.Property(p => p.TenantId).HasColumnName("TENANTID");
+            tab.Property(p => p.ParentId).HasColumnName("PARENTID");
+            tab.Property(p => p.Title).HasColumnName("TITLE").HasMaxLength(PublishFeadbackInfoConsts.MaxTitleLength);
+            tab.Property(p => p.Description).HasColumnName("DESCRIPTION").HasMaxLength(PublishFeadbackInfoConsts.MaxTitleLength);
+            tab.Property(p => p.Release).HasColumnName("RELEASE");
+            tab.Property(p => p.ReleaseDatetime).HasColumnName("RELEASEDATETIME").HasColumnType("timestamp with time zone");
+            tab.Property(p => p.StartTime).HasColumnName("STARTTIME").HasColumnType("timestamp with time zone");
+            tab.Property(p => p.EndTime).HasColumnName("ENDTIME").HasColumnType("timestamp with time zone");
+            tab.Property(p => p.ViewCount).HasColumnName("VIEWCOUNT").HasMaxLength(5);
+
+            //tab.Property(p => p.ContentInfos).HasColumnName("CONTENTINFOS").HasColumnType("jsonb");
+
+            tab.Property(p => p.ExtraProperties).HasColumnName("EXTRAPROPERTIES");
+            tab.Property(p => p.ConcurrencyStamp).HasColumnName("CONCURRENCYSTAMP");
+            tab.Property(p => p.CreationTime).HasColumnName("CREATIONTIME").HasColumnType("timestamp with time zone");
+            tab.Property(p => p.CreatorId).HasColumnName("CREATORID");
+            tab.Property(p => p.LastModificationTime).HasColumnName("LASTMODIFICATIONTIME").HasColumnType("timestamp with time zone");
+            tab.Property(p => p.LastModifierId).HasColumnName("LASTMODIFIERID");
+            tab.Property(p => p.IsDeleted).HasColumnName("ISDELETED");
+            tab.Property(p => p.DeleterId).HasColumnName("DELETERID");
+            tab.Property(p => p.DeletionTime).HasColumnName("DELETIONTIME").HasColumnType("timestamp with time zone");
+            tab.OwnsMany(product =>
+            product.ContentInfos, content =>
+            {
+                content.ToJson();
+                content.OwnsMany(term => term.Terms);
+            });
         });
     }
 }

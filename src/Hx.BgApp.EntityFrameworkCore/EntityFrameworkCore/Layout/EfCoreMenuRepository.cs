@@ -5,10 +5,10 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Hx.BgApp.EntityFrameworkCore.Layout
 {
-    public class EfCoreMenuRepository
+    public class EfCorePublishFeadbackRepository
         : EfCoreRepository<BgAppDbContext, Menu, Guid>, IMenuRepository
     {
-        public EfCoreMenuRepository(IDbContextProvider<BgAppDbContext> dbContextProvider)
+        public EfCorePublishFeadbackRepository(IDbContextProvider<BgAppDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
         }

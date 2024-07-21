@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Hx.BgApp.Layout
 {
-    public class PageAppService : BgAppAppService
+    public class PublishFeadbackAppService : BgAppAppService
     {
         protected IPageRepository PageRepository { get; }
-        public PageAppService(IPageRepository pageRepository)
+        public PublishFeadbackAppService(IPageRepository pageRepository)
         {
             PageRepository = pageRepository;
         }
