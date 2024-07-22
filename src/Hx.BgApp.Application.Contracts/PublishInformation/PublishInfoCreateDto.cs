@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Hx.BgApp.PublishInformation
 {
-    public class PublishFeadbackInfoCreateDto
+    public class PublishInfoCreateDto
     {
         public Guid? ParentId { get; set; }
         /// <summary>
@@ -32,7 +32,7 @@ namespace Hx.BgApp.PublishInformation
         /// <summary>
         /// 结束时间
         /// </summary>
-        public DateTime? EndTime { get; protected set; }
-        public required ICollection<ContentInfoCreateDto> ContentInfos { get; set; }
+        public DateTime? EndTime { get; set; }
+        public required ICollection<ContentInfoCreateDto> PublishInfos { get; set; }
     }
 }

@@ -24,11 +24,14 @@ namespace Hx.BgApp.EntityFrameworkCore.PublishInformation
     CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
-                .Include(d => d.ContentInfos)
+                .Include(d => d.PublishInfos)
+                .ThenInclude(d => d.Terms)
+                .Include(d => d.FeadbackInfos)
                 .ThenInclude(d => d.Terms)
                 .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u => u.Title.Contains(filter))
+                .OrderBy(u => u.CreationTime)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
@@ -44,8 +47,8 @@ namespace Hx.BgApp.EntityFrameworkCore.PublishInformation
         public async Task<PublishFeadbackInfo?> GetFeadbackInfoAsync(Guid id, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
-    .Where(d => d.ParentId == id)
-    .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+                .Where(d => d.ParentId == id)
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
     }
 }

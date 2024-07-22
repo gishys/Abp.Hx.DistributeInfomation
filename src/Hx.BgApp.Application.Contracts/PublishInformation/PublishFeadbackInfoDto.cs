@@ -32,7 +32,8 @@ namespace Hx.BgApp.PublishInformation
         /// <summary>
         /// 结束时间
         /// </summary>
-        public DateTime? EndTime { get; protected set; }
-        public required ICollection<ContentInfoDto> ContentInfos { get; set; }
+        public DateTime? EndTime { get; set; }
+        public required ICollection<ContentInfoDto> PublishInfos { get; set; }
+        public required ICollection<ContentInfoDto> FeadbackInfos { get; set; }
     }
 }

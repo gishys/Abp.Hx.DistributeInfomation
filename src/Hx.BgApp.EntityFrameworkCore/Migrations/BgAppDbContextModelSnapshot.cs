@@ -190,7 +190,7 @@ namespace Hx.BgApp.Migrations
                     b.ToTable("APPPROJECTS", (string)null);
                 });
 
-            modelBuilder.Entity("Hx.BgApp.PublishInfomation.PublishFeadbackInfo", b =>
+            modelBuilder.Entity("Hx.BgApp.PublishInformation.PublishFeadbackInfo", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
@@ -2050,9 +2050,9 @@ namespace Hx.BgApp.Migrations
                         .HasConstraintName("PAGE_PROJECTID");
                 });
 
-            modelBuilder.Entity("Hx.BgApp.PublishInfomation.PublishFeadbackInfo", b =>
+            modelBuilder.Entity("Hx.BgApp.PublishInformation.PublishFeadbackInfo", b =>
                 {
-                    b.OwnsMany("Hx.BgApp.PublishInfomation.ContentInfo", "ContentInfos", b1 =>
+                    b.OwnsMany("Hx.BgApp.PublishInformation.ContentInfo", "FeadbackInfos", b1 =>
                         {
                             b1.Property<Guid>("PublishFeadbackInfoId")
                                 .HasColumnType("uuid");
@@ -2070,7 +2070,7 @@ namespace Hx.BgApp.Migrations
                             b1.Property<int>("Sort")
                                 .HasColumnType("integer");
 
-                            b1.Property<int>("TermType")
+                            b1.Property<int?>("TermType")
                                 .HasColumnType("integer");
 
                             b1.Property<string>("Title")
@@ -2085,12 +2085,12 @@ namespace Hx.BgApp.Migrations
 
                             b1.ToTable("APP_PUBLISH_FEADBACKINFO");
 
-                            b1.ToJson("ContentInfos");
+                            b1.ToJson("FeadbackInfos");
 
                             b1.WithOwner()
                                 .HasForeignKey("PublishFeadbackInfoId");
 
-                            b1.OwnsMany("Hx.BgApp.PublishInfomation.ContentTerm", "Terms", b2 =>
+                            b1.OwnsMany("Hx.BgApp.PublishInformation.ContentTerm", "Terms", b2 =>
                                 {
                                     b2.Property<Guid>("ContentInfoPublishFeadbackInfoId")
                                         .HasColumnType("uuid");
@@ -2134,7 +2134,91 @@ namespace Hx.BgApp.Migrations
                             b1.Navigation("Terms");
                         });
 
-                    b.Navigation("ContentInfos");
+                    b.OwnsMany("Hx.BgApp.PublishInformation.ContentInfo", "PublishInfos", b1 =>
+                        {
+                            b1.Property<Guid>("PublishFeadbackInfoId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer");
+
+                            b1.Property<int>("ContentType")
+                                .HasColumnType("integer");
+
+                            b1.Property<bool>("Required")
+                                .HasColumnType("boolean");
+
+                            b1.Property<int>("Sort")
+                                .HasColumnType("integer");
+
+                            b1.Property<int?>("TermType")
+                                .HasColumnType("integer");
+
+                            b1.Property<string>("Title")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.HasKey("PublishFeadbackInfoId", "Id");
+
+                            b1.ToTable("APP_PUBLISH_FEADBACKINFO");
+
+                            b1.ToJson("PublishInfos");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PublishFeadbackInfoId");
+
+                            b1.OwnsMany("Hx.BgApp.PublishInformation.ContentTerm", "Terms", b2 =>
+                                {
+                                    b2.Property<Guid>("ContentInfoPublishFeadbackInfoId")
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<int>("ContentInfoId")
+                                        .HasColumnType("integer");
+
+                                    b2.Property<int>("Id")
+                                        .ValueGeneratedOnAdd()
+                                        .HasColumnType("integer");
+
+                                    b2.Property<int>("ContentType")
+                                        .HasColumnType("integer");
+
+                                    b2.Property<string>("Explain")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.Property<bool?>("IsCorrect")
+                                        .HasColumnType("boolean");
+
+                                    b2.Property<int>("Sort")
+                                        .HasColumnType("integer");
+
+                                    b2.Property<string>("Title")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.Property<string>("Value")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.HasKey("ContentInfoPublishFeadbackInfoId", "ContentInfoId", "Id");
+
+                                    b2.ToTable("APP_PUBLISH_FEADBACKINFO");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("ContentInfoPublishFeadbackInfoId", "ContentInfoId");
+                                });
+
+                            b1.Navigation("Terms");
+                        });
+
+                    b.Navigation("FeadbackInfos");
+
+                    b.Navigation("PublishInfos");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>

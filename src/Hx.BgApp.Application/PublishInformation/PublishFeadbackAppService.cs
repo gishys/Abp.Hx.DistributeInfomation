@@ -1,5 +1,4 @@
-﻿using Hx.BgApp.Layout;
-using NUglify.Helpers;
+﻿using NUglify.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -14,7 +13,7 @@ namespace Hx.BgApp.PublishInformation
         {
             PublishFeadbackRepository = publishFeadbackRepository;
         }
-        public async Task CreateAsync(PublishFeadbackInfoCreateDto input)
+        public async Task CreateAsync(PublishInfoCreateDto input)
         {
             var publishInfo = new PublishFeadbackInfo(
                 GuidGenerator.Create(),
@@ -26,11 +25,11 @@ namespace Hx.BgApp.PublishInformation
             {
                 publishInfo.Publish();
             }
-            if (input.ContentInfos.Count > 0)
+            if (input.PublishInfos.Count > 0)
             {
-                foreach (var contentInfo in input.ContentInfos)
+                foreach (var contentInfo in input.PublishInfos)
                 {
-                    publishInfo.ContentInfos.Add(new ContentInfo(
+                    publishInfo.PublishInfos.Add(new ContentInfo(
                         contentInfo.Title,
                         contentInfo.Required,
                         contentInfo.ContentType,
@@ -40,7 +39,22 @@ namespace Hx.BgApp.PublishInformation
             }
             await PublishFeadbackRepository.InsertAsync(publishInfo);
         }
-        public async Task<PagedResultDto<PublishFeadbackInfoDto>> GetListAsync(GetPulishFeadbackInfoInput input)
+        public async Task UpdateFeadbackAsync(FeadbackInfoCreateDto input)
+        {
+            var publishInfo = await PublishFeadbackRepository.FindAsync(input.Id);
+            if (publishInfo != null)
+            {
+                input.FeadbackInfos.ForEach(info => publishInfo.FeadbackInfos.Add(
+                    new ContentInfo(
+                        info.Title,
+                        info.Required,
+                        info.ContentType,
+                        info.Sort,
+                        info.Value)));
+                await PublishFeadbackRepository.UpdateAsync(publishInfo);
+            }
+        }
+        public async Task<PagedResultDto<PublishFeadbackInfoDto>> GetListPagedAsync(GetPulishFeadbackInfoInput input)
         {
             var list = await PublishFeadbackRepository.GetListAsync(input.MaxResultCount, input.SkipCount, input.Filter);
             var count = await PublishFeadbackRepository.GetCountAsync(input.Filter);
@@ -51,11 +65,6 @@ namespace Hx.BgApp.PublishInformation
         public async Task<PublishFeadbackInfoDto?> GetAsync(Guid id)
         {
             var publish = await PublishFeadbackRepository.FindAsync(id);
-            var feadback = await PublishFeadbackRepository.GetFeadbackInfoAsync(id);
-            if (publish != null && feadback != null)
-            {
-                feadback.ContentInfos.ForEach(publish.ContentInfos.Add);
-            }
             return ObjectMapper.Map<PublishFeadbackInfo?, PublishFeadbackInfoDto?>(publish);
         }
     }

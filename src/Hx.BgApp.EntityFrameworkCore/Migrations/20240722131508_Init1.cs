@@ -416,7 +416,8 @@ namespace Hx.BgApp.Migrations
                     ISDELETED = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
                     DELETERID = table.Column<Guid>(type: "uuid", nullable: true),
                     DELETIONTIME = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    ContentInfos = table.Column<string>(type: "jsonb", nullable: true)
+                    FeadbackInfos = table.Column<string>(type: "jsonb", nullable: true),
+                    PublishInfos = table.Column<string>(type: "jsonb", nullable: true)
                 },
                 constraints: table =>
                 {

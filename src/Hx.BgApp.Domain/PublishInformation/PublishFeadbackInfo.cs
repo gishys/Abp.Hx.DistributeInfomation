@@ -8,7 +8,13 @@ namespace Hx.BgApp.PublishInformation
     public class PublishFeadbackInfo : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
         public PublishFeadbackInfo() { }
-        public PublishFeadbackInfo(Guid id, string title, DateTime? startTime, DateTime? endTime, Guid? parentId, string? description = null)
+        public PublishFeadbackInfo(
+            Guid id,
+            string title,
+            DateTime? startTime,
+            DateTime? endTime,
+            Guid? parentId,
+            string? description = null)
         {
             Id = id;
             Title = title;
@@ -16,7 +22,6 @@ namespace Hx.BgApp.PublishInformation
             EndTime = endTime;
             ParentId = parentId;
             Description = description;
-            ContentInfos = new List<ContentInfo>();
         }
         /// <summary>
         /// 租户
@@ -54,7 +59,14 @@ namespace Hx.BgApp.PublishInformation
         /// 浏览次数
         /// </summary>
         public int ViewCount { get; protected set; }
-        public ICollection<ContentInfo> ContentInfos { get; protected set; }
+        /// <summary>
+        /// 发布信息
+        /// </summary>
+        public ICollection<ContentInfo> PublishInfos { get; protected set; } = new List<ContentInfo>();
+        /// <summary>
+        /// 反馈信息
+        /// </summary>
+        public ICollection<ContentInfo> FeadbackInfos { get; protected set; } = new List<ContentInfo>();
         public void Publish()
         {
             ReleaseDatetime = DateTime.Now;

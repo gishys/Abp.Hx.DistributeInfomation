@@ -73,10 +73,6 @@ public class BgAppDbContext :
         {
             options.UseNetTopologySuite();
         });
-        //.HasConversion(
-        //    point => new NetTopologySuite.IO.PostGisWriter().Write(point),
-        //    point => (Geometry)new NetTopologySuite.IO.PostGisReader().Read(point)
-        //);
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
     protected override void OnModelCreating(ModelBuilder builder)
@@ -168,8 +164,6 @@ public class BgAppDbContext :
             tab.Property(p => p.EndTime).HasColumnName("ENDTIME").HasColumnType("timestamp with time zone");
             tab.Property(p => p.ViewCount).HasColumnName("VIEWCOUNT").HasMaxLength(5);
 
-            //tab.Property(p => p.ContentInfos).HasColumnName("CONTENTINFOS").HasColumnType("jsonb");
-
             tab.Property(p => p.ExtraProperties).HasColumnName("EXTRAPROPERTIES");
             tab.Property(p => p.ConcurrencyStamp).HasColumnName("CONCURRENCYSTAMP");
             tab.Property(p => p.CreationTime).HasColumnName("CREATIONTIME").HasColumnType("timestamp with time zone");
@@ -179,8 +173,16 @@ public class BgAppDbContext :
             tab.Property(p => p.IsDeleted).HasColumnName("ISDELETED");
             tab.Property(p => p.DeleterId).HasColumnName("DELETERID");
             tab.Property(p => p.DeletionTime).HasColumnName("DELETIONTIME").HasColumnType("timestamp with time zone");
+
             tab.OwnsMany(product =>
-            product.ContentInfos, content =>
+            product.PublishInfos, content =>
+            {
+                content.ToJson();
+                content.OwnsMany(term => term.Terms);
+            });
+
+            tab.OwnsMany(product =>
+            product.FeadbackInfos, content =>
             {
                 content.ToJson();
                 content.OwnsMany(term => term.Terms);
