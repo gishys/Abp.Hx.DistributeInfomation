@@ -9,6 +9,6 @@ namespace Hx.BgApp.PublishInformation
     public class FeadbackInfoCreateDto
     {
         public Guid Id { get; set; }
-        public required ICollection<ContentInfoCreateDto> FeadbackInfos { get; set; }
+        public required ICollection<FeadbackCreateDto> FeadbackInfos { get; set; }
     }
 }

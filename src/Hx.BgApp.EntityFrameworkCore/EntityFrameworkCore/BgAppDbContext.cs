@@ -185,7 +185,6 @@ public class BgAppDbContext :
             product.FeadbackInfos, content =>
             {
                 content.ToJson();
-                content.OwnsMany(term => term.Terms);
             });
         });
     }

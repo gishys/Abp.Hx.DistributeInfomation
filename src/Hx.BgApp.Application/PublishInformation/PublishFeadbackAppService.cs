@@ -1,8 +1,10 @@
 ﻿using NUglify.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.ObjectMapping;
 
 namespace Hx.BgApp.PublishInformation
 {
@@ -20,12 +22,13 @@ namespace Hx.BgApp.PublishInformation
                 input.Title,
                 input.StartTime,
                 input.EndTime,
-                input.ParentId);
+                input.Release,
+                input.Description);
             if (publishInfo.Release)
             {
                 publishInfo.Publish();
             }
-            if (input.PublishInfos.Count > 0)
+            if (input.PublishInfos?.Count > 0)
             {
                 foreach (var contentInfo in input.PublishInfos)
                 {
@@ -44,13 +47,13 @@ namespace Hx.BgApp.PublishInformation
             var publishInfo = await PublishFeadbackRepository.FindAsync(input.Id);
             if (publishInfo != null)
             {
-                input.FeadbackInfos.ForEach(info => publishInfo.FeadbackInfos.Add(
-                    new ContentInfo(
-                        info.Title,
-                        info.Required,
-                        info.ContentType,
-                        info.Sort,
-                        info.Value)));
+                var feadbacks = ObjectMapper.Map<ICollection<FeadbackCreateDto>, ICollection<FeadbackInfo>>(input.FeadbackInfos);
+                int sort = publishInfo.FeadbackInfos.Count > 0 ? publishInfo.FeadbackInfos.Max(d => d.Sort) : 0;
+                feadbacks.ForEach(d =>
+                {
+                    d.SetSort(++sort);
+                    publishInfo.AddFeadbackInfo(d);
+                });
                 await PublishFeadbackRepository.UpdateAsync(publishInfo);
             }
         }
@@ -61,6 +64,11 @@ namespace Hx.BgApp.PublishInformation
             return new PagedResultDto<PublishFeadbackInfoDto>(
                 count,
                 ObjectMapper.Map<List<PublishFeadbackInfo>, List<PublishFeadbackInfoDto>>(list));
+        }
+        public async Task<List<PublishFeadbackInfoDto>> GetListAsync()
+        {
+            var list = await PublishFeadbackRepository.GetListAsync();
+            return ObjectMapper.Map<List<PublishFeadbackInfo>, List<PublishFeadbackInfoDto>>(list);
         }
         public async Task<PublishFeadbackInfoDto?> GetAsync(Guid id)
         {

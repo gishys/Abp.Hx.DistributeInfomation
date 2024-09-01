@@ -33,7 +33,7 @@ namespace Hx.BgApp.Layout
                 var home = new Page("home", "首页", "BgApp.Home", project.Id, false);
                 var usermanagement = new Page("usermanagement", "用户管理", "AbpIdentity.Users", project.Id, false);
                 var rolemanagement = new Page("rolemanagement", "角色管理", "AbpIdentity.Roles", project.Id, false);
-                var publishManagement = new Page("publishfeadbackmanagement", "发布信息管理", "App.PublishFeadback", project.Id, false);
+                var publishManagement = new Page("publishfeadbackmanagement", "发布信息管理", "BgApp.PublishFeadback", project.Id, false);
                 var pages = new List<Page> {
                     home,
                     usermanagement,

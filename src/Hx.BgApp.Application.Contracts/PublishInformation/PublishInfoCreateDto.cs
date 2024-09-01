@@ -8,7 +8,6 @@ namespace Hx.BgApp.PublishInformation
 {
     public class PublishInfoCreateDto
     {
-        public Guid? ParentId { get; set; }
         /// <summary>
         /// 标题
         /// </summary>
@@ -20,7 +19,7 @@ namespace Hx.BgApp.PublishInformation
         /// <summary>
         /// 发布
         /// </summary>
-        public bool Release { get; set; }
+        public bool? Release { get; set; }
         /// <summary>
         /// 发布时间
         /// </summary>
@@ -33,6 +32,6 @@ namespace Hx.BgApp.PublishInformation
         /// 结束时间
         /// </summary>
         public DateTime? EndTime { get; set; }
-        public required ICollection<ContentInfoCreateDto> PublishInfos { get; set; }
+        public ICollection<ContentInfoCreateDto>? PublishInfos { get; set; }
     }
 }

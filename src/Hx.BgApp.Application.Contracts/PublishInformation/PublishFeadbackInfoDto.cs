@@ -8,6 +8,7 @@ namespace Hx.BgApp.PublishInformation
 {
     public class PublishFeadbackInfoDto
     {
+        public Guid Id { get; set; }
         public Guid? ParentId { get; set; }
         /// <summary>
         /// 标题
@@ -34,6 +35,6 @@ namespace Hx.BgApp.PublishInformation
         /// </summary>
         public DateTime? EndTime { get; set; }
         public required ICollection<ContentInfoDto> PublishInfos { get; set; }
-        public required ICollection<ContentInfoDto> FeadbackInfos { get; set; }
+        public required ICollection<FeadbackInfoDto> FeadbackInfos { get; set; }
     }
 }

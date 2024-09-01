@@ -13,14 +13,14 @@ namespace Hx.BgApp.PublishInformation
             string title,
             DateTime? startTime,
             DateTime? endTime,
-            Guid? parentId,
+            bool? release,
             string? description = null)
         {
             Id = id;
             Title = title;
             StartTime = startTime;
             EndTime = endTime;
-            ParentId = parentId;
+            Release = release.HasValue ? release.Value : false;
             Description = description;
         }
         /// <summary>
@@ -66,11 +66,15 @@ namespace Hx.BgApp.PublishInformation
         /// <summary>
         /// 反馈信息
         /// </summary>
-        public ICollection<ContentInfo> FeadbackInfos { get; protected set; } = new List<ContentInfo>();
+        public ICollection<FeadbackInfo> FeadbackInfos { get; protected set; } = new List<FeadbackInfo>();
         public void Publish()
         {
             ReleaseDatetime = DateTime.Now;
             Release = true;
+        }
+        public void AddFeadbackInfo(FeadbackInfo feadbackInfo)
+        {
+            FeadbackInfos.Add(feadbackInfo);
         }
     }
 }

@@ -27,11 +27,8 @@ namespace Hx.BgApp.EntityFrameworkCore.PublishInformation
                 .Include(d => d.PublishInfos)
                 .ThenInclude(d => d.Terms)
                 .Include(d => d.FeadbackInfos)
-                .ThenInclude(d => d.Terms)
-                .WhereIf(
-                !filter.IsNullOrWhiteSpace(),
-                u => u.Title.Contains(filter))
-                .OrderBy(u => u.CreationTime)
+                .WhereIf(!filter.IsNullOrWhiteSpace(), u => u.Title.Contains(filter))
+                .OrderByDescending(u => u.CreationTime)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
