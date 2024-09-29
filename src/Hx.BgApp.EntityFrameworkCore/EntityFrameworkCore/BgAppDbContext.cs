@@ -61,6 +61,7 @@ public class BgAppDbContext :
     public DbSet<Menu> Menus { get; set; }
     public DbSet<Page> Pages { get; set; }
     public DbSet<PublishFeadbackInfo> PublishFeadbackInfos { get; set; }
+    public DbSet<PersonnelInfo> PersonnelInfos { get; set; }
 
     public BgAppDbContext(DbContextOptions<BgAppDbContext> options)
         : base(options)
@@ -186,6 +187,26 @@ public class BgAppDbContext :
             {
                 content.ToJson();
             });
+        });
+        builder.Entity<PersonnelInfo>(tab =>
+        {
+            tab.ToTable(BgAppConsts.DbTablePrefix + "_PERSONNELINFO", BgAppConsts.DbSchema);
+            tab.ConfigureByConvention();
+
+            tab.Property(p => p.Id).HasColumnName("ID").HasPrecision(3);
+            tab.Property(p => p.Age).HasColumnName("AGE");
+            tab.Property(p => p.Name).HasColumnName("NAME").HasMaxLength(50);
+            tab.Property(p => p.Sex).HasColumnName("SEX").HasMaxLength(1);
+            tab.Property(p => p.Phone).HasColumnName("PHONE").HasMaxLength(15);
+            tab.Property(p => p.CertificateNumber).HasColumnName("CERTIFICATENUMBER").HasMaxLength(30);
+
+            tab.Property(p => p.CreationTime).HasColumnName("CREATIONTIME").HasColumnType("timestamp with time zone");
+            tab.Property(p => p.CreatorId).HasColumnName("CREATORID");
+            tab.Property(p => p.LastModificationTime).HasColumnName("LASTMODIFICATIONTIME").HasColumnType("timestamp with time zone");
+            tab.Property(p => p.LastModifierId).HasColumnName("LASTMODIFIERID");
+            tab.Property(p => p.IsDeleted).HasColumnName("ISDELETED");
+            tab.Property(p => p.DeleterId).HasColumnName("DELETERID");
+            tab.Property(p => p.DeletionTime).HasColumnName("DELETIONTIME").HasColumnType("timestamp with time zone");
         });
     }
 }

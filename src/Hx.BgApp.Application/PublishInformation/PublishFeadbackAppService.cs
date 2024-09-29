@@ -12,13 +12,17 @@ namespace Hx.BgApp.PublishInformation
     public class PublishFeadbackAppService : BgAppAppService
     {
         protected IEfCorePublishFeadbackRepository PublishFeadbackRepository { get; }
+        protected IEfCorePersonnelInfoRepository PersonnelInfoRepository { get; }
         protected IConfiguration Configuration { get; }
         public PublishFeadbackAppService(
             IEfCorePublishFeadbackRepository publishFeadbackRepository,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IEfCorePersonnelInfoRepository personnelInfoRepository)
         {
             PublishFeadbackRepository = publishFeadbackRepository;
             Configuration = configuration;
+            PersonnelInfoRepository = personnelInfoRepository;
+
         }
         public async Task CreateAsync(PublishInfoCreateDto input)
         {
@@ -49,6 +53,20 @@ namespace Hx.BgApp.PublishInformation
         }
         public async Task UpdateFeadbackAsync(FeadbackInfoCreateDto input)
         {
+            foreach (var personnel in input.FeadbackInfos)
+            {
+                var exist = await PersonnelInfoRepository.ExaminePersonnelExistAsync(personnel.Name, personnel.CertificateNumber);
+                if (!exist)
+                {
+                    await PersonnelInfoRepository.InsertAsync(new PersonnelInfo(
+                        GuidGenerator.Create(),
+                        personnel.Name,
+                        personnel.Sex,
+                        personnel.CertificateNumber,
+                        personnel.Age,
+                        personnel.Phone));
+                }
+            }
             var publishInfo = await PublishFeadbackRepository.FindAsync(input.Id);
             if (publishInfo != null)
             {

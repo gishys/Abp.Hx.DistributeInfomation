@@ -48,6 +48,7 @@ public class BgAppEntityFrameworkCoreModule : AbpModule
             options.AddRepository<Page, EfCorePageRepository>();
 
             options.AddRepository<PublishFeadbackInfo, EfCorePublishFeadbackRepository>();
+            options.AddRepository<PersonnelInfo, EfCorePersonnelInfoRepository>();
 
             options.AddDefaultRepositories(includeAllEntities: true);
         });

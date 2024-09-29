@@ -9,7 +9,7 @@ namespace Hx.BgApp.PublishInformation
     public class FeadbackCreateDto
     {
         public required string Name { get; set; }
-        public string Sex { get; set; }
+        public required string Sex { get; set; }
         public required string CertificateNumber { get; set; }
         public int Age { get; set; }
         public required string Phone { get; set; }
