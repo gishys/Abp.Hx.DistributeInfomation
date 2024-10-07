@@ -17,9 +17,16 @@ namespace Hx.BgApp.EntityFrameworkCore.PublishInformation
             : base(dbContextProvider)
         {
         }
-        public virtual async Task<bool> ExaminePersonnelExistAsync(string name, string certificateNumber)
+        public virtual async Task<PersonnelInfo?> ExaminePersonnelExistAsync(string name, string certificateNumber)
         {
-            return await (await GetDbSetAsync()).AnyAsync(d => d.Name == name && d.CertificateNumber == certificateNumber);
+            return await (await GetDbSetAsync()).FirstOrDefaultAsync(d => d.Name == name && d.CertificateNumber == certificateNumber);
+        }
+        public virtual async Task<List<PersonnelInfo>> GetListAsync(string? name, string? phone)
+        {
+            return await (await GetDbSetAsync())
+                .WhereIf(!string.IsNullOrEmpty(name), d => d.Name.Contains(name))
+                .WhereIf(!string.IsNullOrEmpty(phone), d => d.Name.Contains(phone))
+                .ToListAsync();
         }
     }
 }

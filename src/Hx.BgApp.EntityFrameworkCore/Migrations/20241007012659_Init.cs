@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Hx.BgApp.Migrations
 {
     /// <inheritdoc />
-    public partial class Init1 : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -391,6 +391,29 @@ namespace Hx.BgApp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "APP_PERSONNELINFO",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uuid", precision: 3, nullable: false),
+                    NAME = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    SEX = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: false),
+                    CERTIFICATENUMBER = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
+                    AGE = table.Column<int>(type: "integer", nullable: false),
+                    PHONE = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false),
+                    CREATIONTIME = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CREATORID = table.Column<Guid>(type: "uuid", nullable: true),
+                    LASTMODIFICATIONTIME = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LASTMODIFIERID = table.Column<Guid>(type: "uuid", nullable: true),
+                    ISDELETED = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    DELETERID = table.Column<Guid>(type: "uuid", nullable: true),
+                    DELETIONTIME = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_APP_PERSONNELINFO", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -1215,6 +1238,9 @@ namespace Hx.BgApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "APP_PERSONNELINFO");
 
             migrationBuilder.DropTable(
                 name: "APP_PUBLISH_FEADBACKINFO");

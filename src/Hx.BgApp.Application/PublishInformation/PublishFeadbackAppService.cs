@@ -4,7 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectMapping;
 
 namespace Hx.BgApp.PublishInformation
@@ -51,12 +53,17 @@ namespace Hx.BgApp.PublishInformation
             }
             await PublishFeadbackRepository.InsertAsync(publishInfo);
         }
+        public async Task<List<PersonnelInfoDto>> GetListPersonnelInfoAsync(string? name, string? phone)
+        {
+            var result = await PersonnelInfoRepository.GetListAsync(name, phone);
+            return ObjectMapper.Map<List<PersonnelInfo>, List<PersonnelInfoDto>>(result);
+        }
         public async Task UpdateFeadbackAsync(FeadbackInfoCreateDto input)
         {
             foreach (var personnel in input.FeadbackInfos)
             {
-                var exist = await PersonnelInfoRepository.ExaminePersonnelExistAsync(personnel.Name, personnel.CertificateNumber);
-                if (!exist)
+                var personnelInfo = await PersonnelInfoRepository.ExaminePersonnelExistAsync(personnel.Name, personnel.CertificateNumber);
+                if (personnelInfo == null)
                 {
                     await PersonnelInfoRepository.InsertAsync(new PersonnelInfo(
                         GuidGenerator.Create(),
@@ -66,10 +73,25 @@ namespace Hx.BgApp.PublishInformation
                         personnel.Age,
                         personnel.Phone));
                 }
+                else
+                {
+                    personnelInfo.SetName(personnel.Name);
+                    personnelInfo.SetSex(personnel.Sex);
+                    personnelInfo.SetCertificateNumber(personnel.CertificateNumber);
+                    personnelInfo.SetAge(personnel.Age);
+                    personnelInfo.SetPhone(personnel.Phone);
+                }
             }
             var publishInfo = await PublishFeadbackRepository.FindAsync(input.Id);
             if (publishInfo != null)
             {
+                foreach (var fd in input.FeadbackInfos)
+                {
+                    if (publishInfo.FeadbackInfos.Any(d => fd.Name == d.Name && fd.CertificateNumber == d.CertificateNumber))
+                    {
+                        throw new UserFriendlyException($"姓名：{fd.Name} 已接龙！");
+                    }
+                }
                 var feadbacks = ObjectMapper.Map<ICollection<FeadbackCreateDto>, ICollection<FeadbackInfo>>(input.FeadbackInfos);
                 int sort = publishInfo.FeadbackInfos.Count > 0 ? publishInfo.FeadbackInfos.Max(d => d.Sort) : 0;
                 feadbacks.ForEach(d =>

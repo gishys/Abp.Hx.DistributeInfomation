@@ -17,42 +17,42 @@ namespace Hx.BgApp.PublishInformation
         /// 人居环境
         /// </summary>
         public int LivingEnvironmentScore { get; set; }
-        public required string LivingEnvironmentPics { get; set; }
+        public string? LivingEnvironmentPics { get; set; }
         /// <summary>
         /// 遵纪守法
         /// </summary>
         public int ObserveLawScore { get; set; }
-        public required string ObserveLawPics { get; set; }
+        public string? ObserveLawPics { get; set; }
         /// <summary>
         /// 家和邻亲
         /// </summary>
         public int NeighborsScore { get;  set; }
-        public required string NeighborsPics { get;  set; }
+        public string? NeighborsPics { get;  set; }
         /// <summary>
         /// 家风建设
         /// </summary>
         public int FamilyTraditionScore { get;  set; }
-        public required string FamilyTraditionPics { get;  set; }
+        public string? FamilyTraditionPics { get;  set; }
         /// <summary>
         /// 兴业致富
         /// </summary>
         public int GettingRichScore { get;  set; }
-        public required string GettingRichPics { get;  set; }
+        public string? GettingRichPics { get;  set; }
         /// <summary>
         /// 政策执行
         /// </summary>
         public int PolicyImplementationScore { get;  set; }
-        public required string PolicyImplementationPics { get;  set; }
+        public string? PolicyImplementationPics { get;  set; }
         /// <summary>
         /// 热心公益
         /// </summary>
         public int PublicSpiritedScore { get;  set; }
-        public required string PublicSpiritedPics { get;  set; }
+        public string? PublicSpiritedPics { get;  set; }
         /// <summary>
         /// 文明新风
         /// </summary>
         public int CivilizedScore { get;  set; }
-        public required string CivilizedPics { get;  set; }
+        public string? CivilizedPics { get;  set; }
         /// <summary>
         /// 额外加分项
         /// </summary>

@@ -13,8 +13,8 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Hx.BgApp.Migrations
 {
     [DbContext(typeof(BgAppDbContext))]
-    [Migration("20240722131508_Init1")]
-    partial class Init1
+    [Migration("20241007012659_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -191,6 +191,76 @@ namespace Hx.BgApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("APPPROJECTS", (string)null);
+                });
+
+            modelBuilder.Entity("Hx.BgApp.PublishInformation.PersonnelInfo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasPrecision(3)
+                        .HasColumnType("uuid")
+                        .HasColumnName("ID");
+
+                    b.Property<int>("Age")
+                        .HasColumnType("integer")
+                        .HasColumnName("AGE");
+
+                    b.Property<string>("CertificateNumber")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)")
+                        .HasColumnName("CERTIFICATENUMBER");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("CREATIONTIME");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("CREATORID");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("DELETERID");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("DELETIONTIME");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("ISDELETED");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("LASTMODIFICATIONTIME");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("LASTMODIFIERID");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("NAME");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)")
+                        .HasColumnName("PHONE");
+
+                    b.Property<string>("Sex")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("character varying(1)")
+                        .HasColumnName("SEX");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("APP_PERSONNELINFO", (string)null);
                 });
 
             modelBuilder.Entity("Hx.BgApp.PublishInformation.PublishFeadbackInfo", b =>
@@ -2055,88 +2125,6 @@ namespace Hx.BgApp.Migrations
 
             modelBuilder.Entity("Hx.BgApp.PublishInformation.PublishFeadbackInfo", b =>
                 {
-                    b.OwnsMany("Hx.BgApp.PublishInformation.ContentInfo", "FeadbackInfos", b1 =>
-                        {
-                            b1.Property<Guid>("PublishFeadbackInfoId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("integer");
-
-                            b1.Property<int>("ContentType")
-                                .HasColumnType("integer");
-
-                            b1.Property<bool>("Required")
-                                .HasColumnType("boolean");
-
-                            b1.Property<int>("Sort")
-                                .HasColumnType("integer");
-
-                            b1.Property<int?>("TermType")
-                                .HasColumnType("integer");
-
-                            b1.Property<string>("Title")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.HasKey("PublishFeadbackInfoId", "Id");
-
-                            b1.ToTable("APP_PUBLISH_FEADBACKINFO");
-
-                            b1.ToJson("FeadbackInfos");
-
-                            b1.WithOwner()
-                                .HasForeignKey("PublishFeadbackInfoId");
-
-                            b1.OwnsMany("Hx.BgApp.PublishInformation.ContentTerm", "Terms", b2 =>
-                                {
-                                    b2.Property<Guid>("ContentInfoPublishFeadbackInfoId")
-                                        .HasColumnType("uuid");
-
-                                    b2.Property<int>("ContentInfoId")
-                                        .HasColumnType("integer");
-
-                                    b2.Property<int>("Id")
-                                        .ValueGeneratedOnAdd()
-                                        .HasColumnType("integer");
-
-                                    b2.Property<int>("ContentType")
-                                        .HasColumnType("integer");
-
-                                    b2.Property<string>("Explain")
-                                        .IsRequired()
-                                        .HasColumnType("text");
-
-                                    b2.Property<bool?>("IsCorrect")
-                                        .HasColumnType("boolean");
-
-                                    b2.Property<int>("Sort")
-                                        .HasColumnType("integer");
-
-                                    b2.Property<string>("Title")
-                                        .IsRequired()
-                                        .HasColumnType("text");
-
-                                    b2.Property<string>("Value")
-                                        .IsRequired()
-                                        .HasColumnType("text");
-
-                                    b2.HasKey("ContentInfoPublishFeadbackInfoId", "ContentInfoId", "Id");
-
-                                    b2.ToTable("APP_PUBLISH_FEADBACKINFO");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("ContentInfoPublishFeadbackInfoId", "ContentInfoId");
-                                });
-
-                            b1.Navigation("Terms");
-                        });
-
                     b.OwnsMany("Hx.BgApp.PublishInformation.ContentInfo", "PublishInfos", b1 =>
                         {
                             b1.Property<Guid>("PublishFeadbackInfoId")
@@ -2217,6 +2205,113 @@ namespace Hx.BgApp.Migrations
                                 });
 
                             b1.Navigation("Terms");
+                        });
+
+                    b.OwnsMany("Hx.BgApp.PublishInformation.FeadbackInfo", "FeadbackInfos", b1 =>
+                        {
+                            b1.Property<Guid>("PublishFeadbackInfoId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer");
+
+                            b1.Property<int>("Age")
+                                .HasColumnType("integer");
+
+                            b1.Property<string>("CertificateNumber")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<string>("CivilizedPics")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<int>("CivilizedScore")
+                                .HasColumnType("integer");
+
+                            b1.Property<string>("ExtraBonus")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<string>("FamilyTraditionPics")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<int>("FamilyTraditionScore")
+                                .HasColumnType("integer");
+
+                            b1.Property<string>("GettingRichPics")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<int>("GettingRichScore")
+                                .HasColumnType("integer");
+
+                            b1.Property<string>("LivingEnvironmentPics")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<int>("LivingEnvironmentScore")
+                                .HasColumnType("integer");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<string>("NeighborsPics")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<int>("NeighborsScore")
+                                .HasColumnType("integer");
+
+                            b1.Property<string>("ObserveLawPics")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<int>("ObserveLawScore")
+                                .HasColumnType("integer");
+
+                            b1.Property<string>("OneVoteVeto")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<string>("Phone")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<string>("PolicyImplementationPics")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<int>("PolicyImplementationScore")
+                                .HasColumnType("integer");
+
+                            b1.Property<string>("PublicSpiritedPics")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<int>("PublicSpiritedScore")
+                                .HasColumnType("integer");
+
+                            b1.Property<int>("Sex")
+                                .HasColumnType("integer");
+
+                            b1.Property<int>("Sort")
+                                .HasColumnType("integer");
+
+                            b1.Property<int>("TotalScore")
+                                .HasColumnType("integer");
+
+                            b1.HasKey("PublishFeadbackInfoId", "Id");
+
+                            b1.ToTable("APP_PUBLISH_FEADBACKINFO");
+
+                            b1.ToJson("FeadbackInfos");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PublishFeadbackInfoId");
                         });
 
                     b.Navigation("FeadbackInfos");

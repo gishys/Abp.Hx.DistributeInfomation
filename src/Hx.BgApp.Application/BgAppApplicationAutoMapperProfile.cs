@@ -22,6 +22,7 @@ public class BgAppApplicationAutoMapperProfile : Profile
         CreateMap<FeadbackCreateDto, FeadbackInfo>(MemberList.Destination);
 
         CreateMap<FeadbackInfo, FeadbackInfoDto>(MemberList.Destination);
+        CreateMap<PersonnelInfo, PersonnelInfoDto>(MemberList.Destination);
     }
     public string ToGeoJsonFeature(Geometry? record)
     {

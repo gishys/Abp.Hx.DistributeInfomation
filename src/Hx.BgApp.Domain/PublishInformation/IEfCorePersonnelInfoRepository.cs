@@ -11,6 +11,7 @@ namespace Hx.BgApp.PublishInformation
 {
     public interface IEfCorePersonnelInfoRepository : IBasicRepository<PersonnelInfo, Guid>
     {
-        Task<bool> ExaminePersonnelExistAsync(string name, string certificateNumber);
+        Task<PersonnelInfo?> ExaminePersonnelExistAsync(string name, string certificateNumber);
+        Task<List<PersonnelInfo>> GetListAsync(string? name, string? phone);
     }
 }
