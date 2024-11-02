@@ -20,5 +20,13 @@ namespace Hx.BgApp.PublishInformation
             string? filter = null,
             CancellationToken cancellationToken = default);
         Task<PublishFeadbackInfo?> GetFeadbackInfoAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<long> GetEvaluationTimesAsync(
+            string? filter = null,
+            CancellationToken cancellationToken = default);
+        Task<double> GetEvaluationAverageAsync(
+    string? filter = null,
+    CancellationToken cancellationToken = default);
+        Task<List<StatDo>> GetYearStatAsync(CancellationToken cancellationToken = default);
+        Task<List<StatDo>> GetMonthStatAsync(CancellationToken cancellationToken = default);
     }
 }

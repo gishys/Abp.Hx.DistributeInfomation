@@ -41,11 +41,53 @@ namespace Hx.BgApp.EntityFrameworkCore.PublishInformation
                 !filter.IsNullOrWhiteSpace(), u => u.Title.Contains(filter))
                 .CountAsync(GetCancellationToken(cancellationToken));
         }
+        public async Task<long> GetEvaluationTimesAsync(
+            string? filter = null,
+            CancellationToken cancellationToken = default)
+        {
+            return await (await GetDbSetAsync())
+                .WhereIf(
+                !filter.IsNullOrWhiteSpace(), u => u.Title.Contains(filter))
+                .Select(d => d.FeadbackInfos.Count)
+                .SumAsync(GetCancellationToken(cancellationToken));
+        }
+        public async Task<double> GetEvaluationAverageAsync(
+    string? filter = null,
+    CancellationToken cancellationToken = default)
+        {
+            var scores = await (await GetDbSetAsync())
+                .WhereIf(!filter.IsNullOrWhiteSpace(), u => u.Title.Contains(filter))
+                .SelectMany(d => d.FeadbackInfos.Select(f => f.TotalScore))
+                .ToListAsync(GetCancellationToken(cancellationToken));
+
+            if (scores.Count == 0)
+            {
+                return 0;
+            }
+
+            return scores.Average();
+        }
         public async Task<PublishFeadbackInfo?> GetFeadbackInfoAsync(Guid id, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
                 .Where(d => d.ParentId == id)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+        }
+        public async Task<List<StatDo>> GetYearStatAsync(CancellationToken cancellationToken = default)
+        {
+            return await (await GetDbSetAsync())
+                .SelectMany(d => d.FeadbackInfos)
+                .GroupBy(d => d.CreateTime.Year)
+                .Select(d => new StatDo() { Type = $"{d.Key}年", Score = d.Average(f => f.TotalScore) })
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+        public async Task<List<StatDo>> GetMonthStatAsync(CancellationToken cancellationToken = default)
+        {
+            return await (await GetDbSetAsync())
+                .SelectMany(d => d.FeadbackInfos)
+                .GroupBy(d => d.CreateTime.Month)
+                .Select(d => new StatDo() { Type = $"{d.Key}月", Score = d.Average(f => f.TotalScore) })
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
     }
 }

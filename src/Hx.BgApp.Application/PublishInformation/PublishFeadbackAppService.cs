@@ -3,6 +3,7 @@ using NUglify.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -122,6 +123,46 @@ namespace Hx.BgApp.PublishInformation
                 }
             }
             return new PagedResultDto<PublishFeadbackInfoDto>(count, result);
+        }
+        public async Task<OverallStat> GetOverallStat()
+        {
+            var totalCount = await PublishFeadbackRepository.GetCountAsync();
+            var evaluationTimes = await PublishFeadbackRepository.GetEvaluationTimesAsync();
+            var householdCount = await PersonnelInfoRepository.GetCountAsync();
+            var evaluationsAverage = await PublishFeadbackRepository.GetEvaluationAverageAsync();
+            return new OverallStat()
+            {
+                InitiateEvaluations = totalCount,
+                EvaluationsTotalTimes = evaluationTimes,
+                HouseholdCount = householdCount,
+                EvaluationsAverage = evaluationsAverage,
+            };
+        }
+        public async Task<List<StatDo>> GetMonthStatAsync(CancellationToken cancellationToken = default)
+        {
+            var list = await PublishFeadbackRepository.GetMonthStatAsync(cancellationToken);
+            var result = new List<StatDo>();
+            for (var i = 1; i < 13; i++)
+            {
+                var mouth = new StatDo() { Type = $"{i}月" };
+                mouth.Score = list.FirstOrDefault(d => d.Type == mouth.Type)?.Score ?? 0;
+                result.Add(mouth);
+            }
+            return result;
+        }
+        public async Task<List<StatDo>> GetYearStatAsync(CancellationToken cancellationToken = default)
+        {
+            var list = await PublishFeadbackRepository.GetYearStatAsync(cancellationToken);
+            if (list.Count < 10)
+            {
+                var last = list.LastOrDefault()?.Type ?? DateTime.Now.Year.ToString();
+                var maxCount = 10 - list.Count + 1;
+                for (var year = 1; year < maxCount; year++)
+                {
+                    list.AddFirst(new StatDo() { Type = $"{Convert.ToInt32(last.Substring(0, 4)) - year}年", Score = 0 });
+                }
+            }
+            return list;
         }
         public async Task<List<PublishFeadbackInfoDto>> GetListAsync()
         {

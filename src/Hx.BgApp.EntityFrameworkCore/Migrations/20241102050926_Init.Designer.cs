@@ -13,7 +13,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Hx.BgApp.Migrations
 {
     [DbContext(typeof(BgAppDbContext))]
-    [Migration("20241007012659_Init")]
+    [Migration("20241102050926_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -2229,6 +2229,9 @@ namespace Hx.BgApp.Migrations
 
                             b1.Property<int>("CivilizedScore")
                                 .HasColumnType("integer");
+
+                            b1.Property<DateTime>("CreateTime")
+                                .HasColumnType("timestamp without time zone");
 
                             b1.Property<string>("ExtraBonus")
                                 .IsRequired()

@@ -1,13 +1,19 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json.Serialization.Metadata;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using Volo.Abp.Domain.Values;
 
 namespace Hx.BgApp.PublishInformation
 {
-    public class FeadbackInfo
+    [Owned]
+    public class FeadbackInfo : ValueObject
     {
         public FeadbackInfo() { }
         public FeadbackInfo(
@@ -34,7 +40,8 @@ namespace Hx.BgApp.PublishInformation
             string civilizedPics,
             string extraBonus,
             string oneVoteVeto,
-            int totalScore)
+            int totalScore,
+            DateTime createTime)
         {
             Sort = sort;
             Name = name;
@@ -61,6 +68,7 @@ namespace Hx.BgApp.PublishInformation
             ExtraBonus = extraBonus;
             OneVoteVeto = oneVoteVeto;
             TotalScore = totalScore;
+            CreateTime = createTime;
         }
         public int Sort { get; protected set; }
         public string Name { get; protected set; }
@@ -120,9 +128,42 @@ namespace Hx.BgApp.PublishInformation
         /// 总分
         /// </summary>
         public int TotalScore { get; protected set; }
+        public DateTime CreateTime { get; protected set; }
         public void SetSort(int sort)
         {
             Sort = sort;
+        }
+
+        protected override IEnumerable<object> GetAtomicValues()
+        {
+            yield return new object[] {
+            Sort ,
+            Name ,
+            Sex ,
+            CertificateNumber ,
+            Age ,
+            Phone,
+            LivingEnvironmentScore ,
+            LivingEnvironmentPics ,
+            ObserveLawScore ,
+            ObserveLawPics ,
+            NeighborsScore ,
+            NeighborsPics ,
+            FamilyTraditionScore ,
+            FamilyTraditionPics ,
+            GettingRichScore ,
+            GettingRichPics ,
+            PolicyImplementationScore ,
+            PolicyImplementationPics ,
+            PublicSpiritedScore ,
+            PublicSpiritedPics ,
+            CivilizedScore ,
+            CivilizedPics ,
+            ExtraBonus ,
+            OneVoteVeto ,
+            TotalScore ,
+            CreateTime ,
+            };
         }
     }
 }

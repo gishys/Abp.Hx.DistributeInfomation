@@ -181,7 +181,6 @@ public class BgAppDbContext :
                 content.ToJson();
                 content.OwnsMany(term => term.Terms);
             });
-
             tab.OwnsMany(product =>
             product.FeadbackInfos, content =>
             {

@@ -26,44 +26,45 @@ namespace Hx.BgApp.PublishInformation
         /// <summary>
         /// 家和邻亲
         /// </summary>
-        public int NeighborsScore { get;  set; }
-        public string? NeighborsPics { get;  set; }
+        public int NeighborsScore { get; set; }
+        public string? NeighborsPics { get; set; }
         /// <summary>
         /// 家风建设
         /// </summary>
-        public int FamilyTraditionScore { get;  set; }
-        public string? FamilyTraditionPics { get;  set; }
+        public int FamilyTraditionScore { get; set; }
+        public string? FamilyTraditionPics { get; set; }
         /// <summary>
         /// 兴业致富
         /// </summary>
-        public int GettingRichScore { get;  set; }
-        public string? GettingRichPics { get;  set; }
+        public int GettingRichScore { get; set; }
+        public string? GettingRichPics { get; set; }
         /// <summary>
         /// 政策执行
         /// </summary>
-        public int PolicyImplementationScore { get;  set; }
-        public string? PolicyImplementationPics { get;  set; }
+        public int PolicyImplementationScore { get; set; }
+        public string? PolicyImplementationPics { get; set; }
         /// <summary>
         /// 热心公益
         /// </summary>
-        public int PublicSpiritedScore { get;  set; }
-        public string? PublicSpiritedPics { get;  set; }
+        public int PublicSpiritedScore { get; set; }
+        public string? PublicSpiritedPics { get; set; }
         /// <summary>
         /// 文明新风
         /// </summary>
-        public int CivilizedScore { get;  set; }
-        public string? CivilizedPics { get;  set; }
+        public int CivilizedScore { get; set; }
+        public string? CivilizedPics { get; set; }
         /// <summary>
         /// 额外加分项
         /// </summary>
-        public required string ExtraBonus { get;  set; }
+        public required string ExtraBonus { get; set; }
         /// <summary>
         /// 一票否决项
         /// </summary>
-        public required string OneVoteVeto { get;  set; }
+        public required string OneVoteVeto { get; set; }
         /// <summary>
         /// 总分
         /// </summary>
-        public int TotalScore { get;  set; }
+        public int TotalScore { get; set; }
+        public DateTime CreateTime { get; protected set; } = DateTime.Now;
     }
 }
